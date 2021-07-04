@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    Controller&gt;<a href="http://Usercontroller.js">Usercontroller.js</a
+    ><br /><br />
+    const User = require("../model/user");<br />
+    const Blog = require("../Model/blog");<br />
+    const mongoose = require("mongoose");<br />
+    const JWT = require("jsonwebtoken");<br /><br /><a
+      href="http://exports.signup"
+      >exports.signup</a
+    >
+    = (req,res) =&gt; {<br />&nbsp;&nbsp;&nbsp; let {firstName,lastName,email,
+    password,dob} =
+    <a href="http://req.body">req.body</a>;<br />&nbsp;&nbsp;&nbsp; let user =
+    new User({<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; firstName,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    lastName,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; email,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    password,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dob,<br />&nbsp;&nbsp;&nbsp;
+    });<br />&nbsp;&nbsp;&nbsp;
+    <a href="http://user.save">user.save</a>()<br />&nbsp;&nbsp;&nbsp; .then(()
+    =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:200">200</a
+    >).send(user);<br />&nbsp;&nbsp;&nbsp; })<br />&nbsp;&nbsp;&nbsp;
+    .catch((error) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.error">console.error</a
+    >(error);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:500">500</a
+    >).send("ERROR");<br />&nbsp;&nbsp;&nbsp; });<br />};<br /><br /><a
+      href="http://exports.login"
+      >exports.login</a
+    >
+    = ((req,res) =&gt; {<br />&nbsp;&nbsp;&nbsp; let {email,password} =
+    <a href="http://req.body">req.body</a>;<br />&nbsp;&nbsp;&nbsp;
+    <a href="http://User.findOne">User.findOne</a>({email : email})<br />&nbsp;&nbsp;&nbsp;
+    .then((user) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.info">console.info</a>(`User with email ${email} was
+    successfully found`);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    if(password ==
+    <a href="http://user.password">user.password</a
+    >){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    const token =
+    <a href="http://JWT.sign">JWT.sign</a
+    >({<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    email :
+    <a href="http://user.email">user.email</a
+    >,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    },<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    "BLOGKey",<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    expiresIn : "1h",<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    });<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.info">console.info</a>("Login Succesful");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:200">200</a
+    >).send({user, token});<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.warn">console.warn</a>("password incorrect");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:401">401</a
+    >).send("password is incorrect");<br />&nbsp;&nbsp;&nbsp; })<br />&nbsp;&nbsp;&nbsp;
+    .catch((error) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.error">console.error</a>(`User with email ${email}
+    was not found`);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:404">404</a
+    >).send(`User with email ${email} was not found`)<br />&nbsp;&nbsp;&nbsp;
+    });<br />});<br /><br /><a href="http://exports.getUser">exports.getUser</a>
+    = (req,res) =&gt; {<br />&nbsp;&nbsp;&nbsp; let email =
+    <a href="http://req.params.email">req.params.email</a
+    >;<br />&nbsp;&nbsp;&nbsp;
+    <a href="http://User.findOne">User.findOne</a>({email : email})<br />&nbsp;&nbsp;&nbsp;
+    .then((user) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    if(user) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.info">console.info</a>("user found");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:200">200</a
+    >).send(user);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.error">console.error</a>("User was not found");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:500">500</a
+    >).send("ERROR");<br />&nbsp;&nbsp;&nbsp; });<br />};<br /><br /><a
+      href="http://exports.postblog"
+      >exports.postblog</a
+    >
+    = (req,res) =&gt; {<br />&nbsp;&nbsp;&nbsp; let{heading, blogdisc, userId} =
+    <a href="http://req.body">req.body</a>;<br />&nbsp;&nbsp;&nbsp; let blog =
+    new Blog({<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; heading,
+    blogdisc, userId,<br />&nbsp;&nbsp;&nbsp; });<br />&nbsp;&nbsp;&nbsp;
+    <a href="http://blog.save">blog.save</a>()<br />&nbsp;&nbsp;&nbsp;
+    .then((blog) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:200">200</a
+    >).send(blog);<br />&nbsp;&nbsp;&nbsp; })<br />&nbsp;&nbsp;&nbsp;
+    .catch((error) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.error">console.error</a
+    >(error);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:500">500</a
+    >).send("ERROR");<br />&nbsp;&nbsp;&nbsp; });<br />};<br /><br /><a
+      href="http://exports.getblog"
+      >exports.getblog</a
+    >
+    = (req,res) =&gt; {<br />&nbsp;&nbsp;&nbsp; let { userId } =
+    <a href="http://req.params">req.params</a>;<br />&nbsp;&nbsp;&nbsp; userId =
+    <a href="http://mongoose.Types.ObjectId">mongoose.Types.ObjectId</a
+    >(userId);<br />&nbsp;&nbsp;&nbsp;
+    <a href="http://Blog.find">Blog.find</a>({userId : userId})<br />&nbsp;&nbsp;&nbsp;
+    .then((blog) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(<a
+      href="http://blog.length"
+      >blog.length</a
+    >
+    != 0){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.info">console.info</a>("blog found");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:200">200</a
+    >).send(blog);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.error">console.error</a>("no such blog found");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    return <a href="http://res.status">res.status</a>(<a href="tel:404">404</a
+    >).send("[]");<br />&nbsp;&nbsp;&nbsp; })<br />&nbsp;&nbsp;&nbsp;
+    .catch((error) =&gt; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="http://console.log">console.log</a
+    >(error);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
+    <a href="http://res.status">res.status</a>(<a href="tel:500">500</a
+    >).send("ERROR");<br />&nbsp;&nbsp;&nbsp; });<br />};
+  </body>
+</html>
